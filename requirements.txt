@@ -3,12 +3,16 @@ click==8.0.3
 flake8==4.0.1
 Flask==2.0.2
 Flask-Cors==3.0.10
+flask-marshmallow==0.14.0
 Flask-SQLAlchemy==2.5.1
 greenlet==1.1.2
 itsdangerous==2.0.1
 Jinja2==3.0.3
 MarkupSafe==2.0.1
+marshmallow==3.14.1
+marshmallow-sqlalchemy==0.27.0
 mccabe==0.6.1
+mysqlclient==2.1.0
 pycodestyle==2.8.0
 pyflakes==2.4.0
 python-dotenv==0.19.2
