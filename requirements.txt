@@ -12,7 +12,6 @@ MarkupSafe==2.0.1
 marshmallow==3.14.1
 marshmallow-sqlalchemy==0.27.0
 mccabe==0.6.1
-mysqlclient==2.1.0
 pycodestyle==2.8.0
 pyflakes==2.4.0
 python-dotenv==0.19.2
