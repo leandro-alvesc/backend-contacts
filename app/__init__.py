@@ -2,6 +2,7 @@ from os import environ
 
 from config import get_env_config, get_logger_config
 from flask import Flask
+from flask_migrate import Migrate
 
 from app.routes.contacts import contacts
 
@@ -23,6 +24,9 @@ app.config.from_object(config)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 ma.init_app(app)
+
+# Migrate
+migrate = Migrate(app, db)
 
 # Register blueprints
 app.register_blueprint(contacts, url_prefix='/contacts')
