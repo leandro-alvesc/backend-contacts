@@ -1,11 +1,11 @@
 from os import environ
 
-from flask_sqlalchemy import SQLAlchemy
-
 from config import get_env_config, get_logger_config
 from flask import Flask
 
-from app.views.contacts import contacts
+from app.routes.contacts import contacts
+
+from .models import db, ma
 
 # ENV Config
 ENV = environ.get('ENV', 'LOCAL')
@@ -21,7 +21,8 @@ app.config.from_object(config)
 
 # DB Config
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
+db.init_app(app)
+ma.init_app(app)
 
 # Register blueprints
 app.register_blueprint(contacts, url_prefix='/contacts')
