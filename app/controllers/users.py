@@ -7,11 +7,13 @@ from app.exceptions import InternalServerError
 class UserController:
     @staticmethod
     def get_users():
-        pass
+        users = Users.query.all()
+        return users
 
     @staticmethod
-    def get_user_by_id():
-        pass
+    def get_user_by_id(id):
+        user = Users.query.get(id)
+        return user
 
     @staticmethod
     def insert_user(username, password, name, email, phone=''):

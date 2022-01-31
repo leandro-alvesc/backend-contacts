@@ -6,7 +6,7 @@ from flask_migrate import Migrate
 
 from app.routes.contacts import contacts
 from app.routes.users import users
-from app.routes.users import auth
+from app.routes.auth import auth
 
 from .models import db, ma
 
@@ -33,4 +33,4 @@ migrate = Migrate(app, db)
 # Register blueprints
 app.register_blueprint(contacts, url_prefix='/contacts')
 app.register_blueprint(users, url_prefix='/users')
-app.register_blueprint(auth, url_prefix='auth')
+app.register_blueprint(auth, url_prefix='/auth')
