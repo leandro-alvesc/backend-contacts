@@ -1,4 +1,5 @@
 from datetime import datetime
+from marshmallow import fields, validate
 
 from . import db, ma
 
@@ -12,7 +13,7 @@ class Users(db.Model):
     name = db.Column(db.String(60), nullable=False)
     email = db.Column(db.String(50), nullable=False)
     phone = db.Column(db.String(15))
-    created_on = db.Column(db.DateTime, default=datetime.now())
+    created_at = db.Column(db.DateTime, default=datetime.now())
 
     def __init__(self, username, password, name, email, phone) -> None:
         self.username = username
@@ -26,9 +27,11 @@ class Users(db.Model):
 
 
 class UsersSchema(ma.Schema):
-    class Meta:
-        fields = ('id', 'username', 'password', 'name', 'email', 'phone',
-                  'created_on')
+    username = fields.Str(required=True, validate=validate.Length(7, 20))
+    password = fields.Str(required=True, validate=validate.Length(8, 200))
+    name = fields.Str(required=True, validate=validate.Length(5, 60))
+    email = fields.Email(required=True, validate=validate.Length(6, 50))
+    phone = fields.Str(validate=validate.Length(0, 15))
 
 
 user_schema = UsersSchema()
