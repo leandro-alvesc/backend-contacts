@@ -3,6 +3,7 @@ from os import environ
 from config import get_env_config, get_logger_config
 from flask import Flask
 from flask_migrate import Migrate
+from flask_cors import CORS
 
 from app.routes.contacts import contacts
 from app.routes.users import users
@@ -19,6 +20,7 @@ logger = get_logger_config()
 
 # App config
 app = Flask(__name__)
+CORS(app)
 
 app.config.from_object(config)
 

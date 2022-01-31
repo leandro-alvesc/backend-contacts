@@ -16,4 +16,4 @@ def login(token, *args, **kwargs):
 @dec.required_schema(user_schema)
 def register(body, *args, **kwargs):
     user = UsersController.insert_user(**body)
-    return jsonify(user_schema.dump(user))
+    return jsonify({'email': user.email}), 201
