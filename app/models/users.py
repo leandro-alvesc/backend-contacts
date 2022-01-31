@@ -28,7 +28,7 @@ class Users(db.Model):
 
 class UsersSchema(ma.Schema):
     id = fields.Int(dump_only=True)
-    username = fields.Str(required=True, validate=validate.Length(7, 20))
+    username = fields.Str(required=True, validate=validate.Length(5, 20))
     password = fields.Str(required=True, validate=validate.Length(8, 200),
                           load_only=True)
     name = fields.Str(required=True, validate=validate.Length(5, 60))
