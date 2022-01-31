@@ -20,13 +20,13 @@ class UsersController:
     def get_user_by_username(username):
         try:
             user = Users.query.filter(Users.username == username).one()
+            return user
         except Exception as e:
             app.logger.error(str(e))
             raise BadRequest({
                 'code': 'NOT_FOUND',
                 'message': 'User not found'
             })
-        return user
 
     @classmethod
     def check_auth(cls, username, password):

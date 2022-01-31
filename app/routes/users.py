@@ -5,6 +5,8 @@ from app.models.users import user_schema, users_schema
 
 users = Blueprint('users', __name__)
 
+# TODO: Create authentication for these routes
+
 
 @users.route('', methods=['GET'])
 def get_users(*args, **kwargs):
