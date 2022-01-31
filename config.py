@@ -7,7 +7,7 @@ class Config:
     TESTING = False
     SECRET_KEY = 'change-this-please'
     JWT_SECRET_KEY = 'another-key-to-change'
-    SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
 
 
 class DevelopmentConfig(Config):
@@ -21,7 +21,8 @@ class TestingConfig(Config):
 
 def get_env_config(ENV) -> Config:
     config = {
-        'LOCAL': DevelopmentConfig
+        'LOCAL': DevelopmentConfig,
+        'TEST': TestingConfig
     }
     return config.get(ENV)
 
