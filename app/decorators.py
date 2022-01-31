@@ -60,7 +60,8 @@ class Decorators:
             token = bearer_token.split()[-1]
 
             try:
-                jwt_info = jwt.decode(token, app.config.JWT_SECRET_KEY)
+                jwt_info = jwt.decode(token, app.config.JWT_SECRET_KEY,
+                                      algorithms=["HS256"])
 
                 username = jwt_info.get('sub')
                 user = UsersController.get_user_by_username(username)

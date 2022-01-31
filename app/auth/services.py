@@ -17,4 +17,4 @@ class AuthService:
             'sub': username,
             'iat': datetime.utcnow(),
             'exp': datetime.utcnow() + timedelta(minutes=3600 * 31)
-        }, app.config.JWT_SECRET_KEY)
+        }, app.config.JWT_SECRET_KEY, algorithm='HS256')
