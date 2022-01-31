@@ -4,7 +4,7 @@ from app.models.users import Users
 from app.exceptions import InternalServerError
 
 
-class UserController:
+class UsersController:
     @staticmethod
     def get_users():
         users = Users.query.all()
