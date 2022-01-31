@@ -13,9 +13,10 @@ class Contacts(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship('Users')
 
-    def __init__(self, name, phone) -> None:
+    def __init__(self, name, phone, user_id) -> None:
         self.name = name
         self.phone = phone
+        self.user_id = user_id
 
 
 class ContactsSchema(ma.Schema):
