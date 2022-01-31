@@ -19,7 +19,7 @@ class TestLogin(unittest.TestCase):
             '/auth/login', headers={"Authorization": f"Basic {credentials}"})
         self.token = self.login.json.get('token')
         self.user = self.client.get(
-            '/auth/user', headers={"Authorization": f"Bearer {self.token}"})
+            '/users/me', headers={"Authorization": f"Bearer {self.token}"})
 
     def test_login(self):
         self.assertEqual(200, self.login.status_code)

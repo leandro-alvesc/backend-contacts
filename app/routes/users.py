@@ -14,6 +14,12 @@ def get_users(*args, **kwargs):
     return jsonify(users_schema.dump(users))
 
 
+@users.route('/me', methods=['GET'])
+@dec.required_token
+def get_me(user, *args, **kwargs):
+    return jsonify(user_schema.dump(user))
+
+
 @users.route('', methods=['POST'])
 @dec.required_schema(user_schema)
 def insert_user(body, *args, **kwargs):
