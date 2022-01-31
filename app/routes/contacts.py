@@ -1,7 +1,8 @@
 from flask import Blueprint, jsonify
 from app.controllers.contacts import ConctactsController
 from app.decorators import Decorators as dec
-from app.models.contacts import contact_schema, contacts_schema
+from app.models.contacts import (contact_schema, contacts_schema,
+                                 partial_contact_schema)
 
 contacts = Blueprint('contacts', __name__)
 
@@ -19,6 +20,14 @@ def get_contacts(user, *args, **kwargs):
 def insert_contact(user, body, *args, **kwargs):
     contact = ConctactsController.insert_contact(user, **body)
     return jsonify(contact_schema.dump(contact))
+
+
+@contacts.route('/<key>', methods=['PATCH'])
+@dec.required_token
+@dec.required_schema(partial_contact_schema)
+def patch_contact(key, body, *args, **kwargs):
+    contact = ConctactsController.update_contact(contact_id=key, **body)
+    return jsonify(contact_schema.dump(contact)), 200
 
 
 @contacts.route('/<key>', methods=['DELETE'])

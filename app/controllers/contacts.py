@@ -2,6 +2,8 @@ import app
 from app.exceptions import InternalServerError, BadRequest
 from app.models.contacts import Contacts
 from app.models import db
+from sqlalchemy.exc import SQLAlchemyError
+import re
 
 
 class ConctactsController:
@@ -52,6 +54,21 @@ class ConctactsController:
         return contact
 
     @classmethod
+    def update_contact(cls, contact_id, **fields):
+        contact = cls.get_contact_by_id(contact_id)
+        if not contact:
+            raise BadRequest({
+                'code': 'NOT_FOUND',
+                'message': 'Contact not found'
+            })
+
+        [setattr(contact, field, fields[field]) for field in fields if hasattr(
+            contact, field)]
+
+        cls._commit_session()
+        return contact
+
+    @classmethod
     def delete_contact(cls, contact_id):
         contact = cls.get_contact_by_id(contact_id)
         if not contact:
@@ -64,15 +81,23 @@ class ConctactsController:
         cls._commit_session()
         return contact
 
-    @staticmethod
-    def _commit_session():
+    @classmethod
+    def _commit_session(cls):
         try:
             db.session.commit()
-        except Exception as e:
+        except SQLAlchemyError as e:
             app.logger.error(str(e))
-            message = e.args[0].split(') ')
-            message = message[1].split(' "')
-            raise InternalServerError({
-                'code': 'INTERNAL_SERVER_ERROR',
-                'message': message[0]
-            })
+
+            raise InternalServerError(cls._format_error_message(e))
+
+    @staticmethod
+    def _format_error_message(err):
+        message = str(err.__dict__['orig'])
+        error_name = type(err.__dict__['orig']).__name__
+        code = re.sub('([A-Z][a-z]+)', r' \1',
+                      re.sub('([A-Z]+)', r' \1', error_name)).split()
+        code = '_'.join(code)
+        return {
+            'code': code.upper(),
+            'message': message
+        }

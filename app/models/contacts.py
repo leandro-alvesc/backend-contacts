@@ -21,11 +21,12 @@ class Contacts(db.Model):
 
 class ContactsSchema(ma.Schema):
     id = fields.Int(dump_only=True)
-    name = fields.Str(required=True, validate=validate.Length(5, 60))
+    name = fields.Str(required=True, validate=validate.Length(2, 60))
     phone = fields.Str(required=True, validate=validate.Length(8, 15))
     deleted = fields.Bool()
     user_id = fields.Int(dump_only=True)
 
 
 contact_schema = ContactsSchema()
+partial_contact_schema = ContactsSchema(partial=True)
 contacts_schema = ContactsSchema(many=True)
