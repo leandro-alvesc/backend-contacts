@@ -1,8 +1,11 @@
+import re
+
 import app
-from werkzeug.security import generate_password_hash, check_password_hash
+from app.exceptions import BadRequest, Forbidden, InternalServerError
 from app.models import db
 from app.models.users import Users
-from app.exceptions import InternalServerError, BadRequest, Forbidden
+from sqlalchemy.exc import SQLAlchemyError
+from werkzeug.security import check_password_hash, generate_password_hash
 
 
 class UsersController:
@@ -39,8 +42,8 @@ class UsersController:
             })
         return user
 
-    @staticmethod
-    def insert_user(username, password, name, email, phone=''):
+    @classmethod
+    def insert_user(cls, username, password, name, email, phone=''):
         password = generate_password_hash(password)
         user = Users(
             username=username,
@@ -50,14 +53,27 @@ class UsersController:
             phone=phone
         )
 
+        db.session.add(user)
+        cls._commit_session()
+        return user
+
+    @classmethod
+    def _commit_session(cls):
         try:
-            db.session.add(user)
             db.session.commit()
-            return user
-        except Exception as e:
-            message = e.args[0].split(') ')
-            message = message[1].split(' "')
-            raise InternalServerError({
-                'code': 'INTERNAL_SERVER_ERROR',
-                'message': message[0]
-            })
+        except SQLAlchemyError as e:
+            app.logger.error(str(e))
+
+            raise InternalServerError(cls._format_error_message(e))
+
+    @staticmethod
+    def _format_error_message(err):
+        message = str(err.__dict__['orig'])
+        error_name = type(err.__dict__['orig']).__name__
+        code = re.sub('([A-Z][a-z]+)', r' \1',
+                      re.sub('([A-Z]+)', r' \1', error_name)).split()
+        code = '_'.join(code)
+        return {
+            'code': code.upper(),
+            'message': message
+        }
