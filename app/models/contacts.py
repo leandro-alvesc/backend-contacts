@@ -8,6 +8,8 @@ class Contacts(db.Model):
     name = db.Column(db.String(60), nullable=False)
     phone = db.Column(db.String(15), nullable=False)
     deleted = db.Column(db.Boolean())
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship('Users')
 
     def __init__(self, name, phone) -> None:
         self.name = name
