@@ -6,6 +6,7 @@ class Config:
     DEBUG = False
     TESTING = False
     SECRET_KEY = 'change-this-please'
+    JWT_SECRET_KEY = 'another-key-to-change'
     SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
 
 

@@ -1,7 +1,8 @@
-from werkzeug.security import generate_password_hash
+import app
+from werkzeug.security import generate_password_hash, check_password_hash
 from app.models import db
 from app.models.users import Users
-from app.exceptions import InternalServerError
+from app.exceptions import InternalServerError, BadRequest, Forbidden
 
 
 class UsersController:
@@ -13,6 +14,29 @@ class UsersController:
     @staticmethod
     def get_user_by_id(id):
         user = Users.query.get(id)
+        return user
+
+    @staticmethod
+    def get_user_by_username(username):
+        try:
+            user = Users.query.filter(Users.username == username).one()
+        except Exception as e:
+            app.logger.error(str(e))
+            raise BadRequest({
+                'code': 'NOT_FOUND',
+                'message': 'User not found'
+            })
+        return user
+
+    @classmethod
+    def check_auth(cls, username, password):
+        user = cls.get_user_by_username(username)
+        match = check_password_hash(user.password, password)
+        if not match:
+            raise Forbidden({
+                'code': 'INVALID_USER_OR_PASSWORD',
+                'message': 'Invalid user or password'
+            })
         return user
 
     @staticmethod
