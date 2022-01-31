@@ -1,3 +1,5 @@
+from marshmallow import fields, validate
+
 from . import db, ma
 
 
@@ -17,8 +19,11 @@ class Contacts(db.Model):
 
 
 class ContactsSchema(ma.Schema):
-    class Meta:
-        fields = ('id', 'name', 'phone', 'deleted')
+    id = fields.Int(dump_only=True)
+    name = fields.Str(required=True, validate=validate.Length(5, 60))
+    phone = fields.Str(required=True, validate=validate.Length(8, 15))
+    deleted = fields.Bool()
+    user_id = fields.Int(dump_only=True)
 
 
 contact_schema = ContactsSchema()
