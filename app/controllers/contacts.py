@@ -10,7 +10,9 @@ class ConctactsController:
     @staticmethod
     def get_contacts(user):
         try:
-            contacts = Contacts.query.filter(Contacts.user_id == user.id)
+            contacts = Contacts.query.filter(
+                Contacts.user_id == user.id,
+                Contacts.deleted == False)  # noqa: E712
             return contacts
         except Exception as e:
             app.logger.error(str(e))
