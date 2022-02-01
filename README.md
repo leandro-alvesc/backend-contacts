@@ -26,6 +26,11 @@ Run the following commands:
 python3.9 -m venv env
 ```
 
+- Install dependencies:
+```
+pip install -r requirements.txt
+```
+
 - Create a .env file with your settings, e.g.:
 ```
 FLASK_ENV=development
